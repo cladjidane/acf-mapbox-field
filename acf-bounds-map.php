@@ -70,17 +70,10 @@ if (!class_exists('K_acf_plugin_bounds_map')) :
 
 		function include_field($version = false)
 		{
-
-			// support empty $version
-			if (!$version) $version = 4;
-
-
 			// load textdomain
 			load_plugin_textdomain('KACF', false, plugin_basename(dirname(__FILE__)) . '/lang');
-
-
 			// include
-			include_once('fields/class-k-acf-field-bounds-map-v' . $version . '.php');
+			include_once('fields/class-k-acf-field-bounds-map.php');
 		}
 	}
 
