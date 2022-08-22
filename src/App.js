@@ -11,13 +11,13 @@ import mapboxgl from 'mapbox-gl'
 mapboxgl.accessToken =
   'pk.eyJ1IjoiamVvZnVuIiwiYSI6ImNrd3huZXZjMzAwMWkycXFtb29zeDMxdnMifQ.N0SyKbZ6Br7bCL0IPmUZIg'
 
-const App = () => {
+const App = ({ field }) => {
   const mapContainerRef = useRef(null)
 
   const [lng, setLng] = useState(5)
   const [lat, setLat] = useState(34)
   const [zoom, setZoom] = useState(1.5)
-  const [bounds, setBounds] = useState(null)
+  const [bounds, setBounds] = useState(JSON.parse(field.value) || null)
   const [map, setMap] = useState(null)
 
   const geocoder = new MapboxGeocoder({
@@ -47,7 +47,11 @@ const App = () => {
 
     // BOUNDS
     map.addControl(new BoundsControl(), 'top-right')
-    map.on('bounds.get', () => setBounds(map.getBounds()))
+    map.on('bounds.get', () => {
+      const b = map.getBounds()
+      field.value = JSON.stringify(b)
+      setBounds(b)
+    })
 
     map.on('load', () => {
       setMap(map)
@@ -58,27 +62,17 @@ const App = () => {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (mapContainerRef.current && bounds !== null) {
-      const bbox = bounds
-      map.fitBounds(bbox, {
-        padding: {
-          top: 20,
-          bottom: 20,
-          left: 20,
-          right: 20,
-        },
-      })
+    if (map && bounds !== null) {
+      const southWest = new mapboxgl.LngLat(bounds._sw.lng, bounds._sw.lat)
+      const northEast = new mapboxgl.LngLat(bounds._ne.lng, bounds._ne.lat)
+      const boundingBox = new mapboxgl.LngLatBounds(southWest, northEast)
+
+      map.fitBounds(boundingBox)
     }
-  }, [bounds]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [bounds, map]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>
-      <div className='sidebarStyle'>
-        <div>
-          Longitude: {lng} | Latitude: {lat} | Zoom: {zoom} | Bounds:{' '}
-          {JSON.stringify(bounds)}
-        </div>
-      </div>
       <div className='map-container' ref={mapContainerRef} />
     </div>
   )
