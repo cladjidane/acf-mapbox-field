@@ -1,0 +1,32 @@
+{
+  // See http://go.microsoft.com/fwlink/?LinkId=827846
+  // for the documentation about the extensions.json format
+  "recommendations": [
+    "patbenatar.advanced-new-file",
+    "atishay-jain.all-autocomplete",
+    "formulahendry.auto-close-tag",
+    "formulahendry.auto-rename-tag",
+    "alefragnani.bookmarks",
+    "msjsdiag.debugger-for-chrome",
+    "vilicvane.es-quotes",
+    "dbaeumer.vscode-eslint",
+    "ms-ceintl.vscode-language-pack-fr",
+    "xabikos.javascriptsnippets",
+    "yzhang.markdown-all-in-one",
+    "bierner.markdown-preview-github-styles",
+    "davidanson.vscode-markdownlint",
+    "possan.nbsp-vscode",
+    "eg2.vscode-npm-script",
+    "christian-kohler.path-intellisense",
+    "esbenp.prettier-vscode",
+    "humao.rest-client",
+    "stkb.rewrap",
+    "jasonnutter.search-node-modules",
+    "amatiasq.sort-imports",
+    "ow.vscode-subword-navigation",
+    "visualstudioexptteam.vscodeintellicode",
+    "styled-components.vscode-styled-components",
+    "emmanuelbeziat.vscode-great-icons",
+    "bradlc.vscode-tailwindcss"
+  ]
+}

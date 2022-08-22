@@ -2,6 +2,12 @@
   "name": "acf-boundmap",
   "version": "0.1.0",
   "private": true,
+  "source": "src/index.js",
+  "targets": {
+    "default": {
+      "distDir": "./assets"
+    }
+  },
   "dependencies": {
     "@mapbox/mapbox-gl-geocoder": "^5.0.1",
     "@testing-library/jest-dom": "^5.16.5",
@@ -17,7 +23,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "build:widget": "parcel build src/index.js --no-source-maps --dist-dir acf-field/assets",
+    "build:widget": "parcel build --no-source-maps",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -27,6 +33,9 @@
     ]
   },
   "browserslist": {
+    "engines": {
+      "browsers": "> 0.25%"
+    },
     "production": [
       ">0.2%",
       "not dead",
