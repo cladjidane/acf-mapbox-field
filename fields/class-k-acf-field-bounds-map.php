@@ -151,7 +151,7 @@ if (!class_exists('K_acf_field_bounds_map')) :
 		*/
 
 ?>
-			<div id="root" data-value="<?php echo esc_attr($field['value']) ?>"></div>
+			<div id="root"></div>
 			<input id="field_bounds" type="text" name="<?php echo esc_attr($field['name']) ?>" value="<?php echo esc_attr($field['value']) ?>" style="font-size:<?php echo $field['font_size'] ?>px;" />
 
 			<link href="https://jeofun.fr/storymap/wp-content/plugins/acf-mapbox-field/assets/index.css" rel="stylesheet" />
