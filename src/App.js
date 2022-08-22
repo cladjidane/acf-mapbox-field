@@ -54,21 +54,31 @@ const App = ({ field }) => {
 
     function updateArea(e) {
       const data = draw.getAll()
-      console.log(data)
-      let bbox = turf.bbox(data)
-      let bounds = turf.bboxPolygon(bbox)
+      const coordinates = data.features[0].geometry.coordinates
 
-      map.fitBounds(bounds, {
-        padding: {
-          top: 50,
-          bottom: 50,
-          left: 50,
-          right: 50,
-        },
-      })
+      const bounding = new mapboxgl.LngLatBounds(
+        coordinates[0][0],
+        coordinates[0][0]
+      )
 
-      field.value = JSON.stringify(bbox)
-      map.getSource('route').setData(bounds)
+      for (const coord of coordinates[0]) {
+        bounding.extend(coord)
+      }
+
+      //const marker1 = new mapboxgl.Marker().setLngLat(bounding._ne).addTo(map)
+      //const marker2 = new mapboxgl.Marker().setLngLat(bounding._sw).addTo(map)
+
+      field.value = JSON.stringify(coordinates)
+      map.getSource('route').setData(turf.bboxPolygon(turf.bbox(data)))
+
+      // TimeOut néçessaire pour je ne sais quelle raison
+      // Sans ça la première fois le fit ne marche pas mais en déplaçant un point ça marche bien
+      // Ce petit timeout regle le soucis ??
+      setTimeout(() => {
+        map.fitBounds(bounding, {
+          padding: 50,
+        })
+      }, 200)
     }
 
     // Add navigation control (the +/- zoom buttons)
@@ -108,27 +118,31 @@ const App = ({ field }) => {
 
   useEffect(() => {
     if (map && bounds !== null) {
-      /*
-      let line = turf.lineString(bounds)
-      let polygon = turf.lineToPolygon(line)
-      console.log(polygon)
-      let bbox = turf.bboxPolygon(polygon)
-      map.fitBounds(bbox, {
-        padding: {
-          top: 20,
-          bottom: 20,
-          left: 20,
-          right: 20,
-        },
+      let polygon = turf.polygon(bounds)
+      let features = turf.explode(polygon).features
+      let bounding = new mapboxgl.LngLatBounds(bounds[0][0], bounds[0][0])
+
+      for (const coord of bounds[0]) {
+        bounding.extend(coord)
+      }
+
+      map.on('load', function () {
+        for (const feature of turf.explode(polygon).features) {
+          var featureIds = draw.add(feature)
+          console.log('featureIds', featureIds)
+        }
       })
-      map.getSource('route').setData(turf.bboxPolygon(bbox))
-      */
+      setTimeout(() => {
+        map.fitBounds(bounding, {
+          padding: 50,
+        })
+      }, 200)
     }
   }, [bounds, map]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>
-      <div className='map-container' ref={mapContainerRef} />
+      <div className="map-container" ref={mapContainerRef} />
     </div>
   )
 }
