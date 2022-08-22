@@ -21,8 +21,8 @@ const App = ({ field }) => {
   const [lng, setLng] = useState(5)
   const [lat, setLat] = useState(34)
   const [zoom, setZoom] = useState(1.5)
-  const [bounds, setBounds] = useState(JSON.parse(field.value) || null)
   const [map, setMap] = useState(null)
+  const [bounds, setBounds] = useState(JSON.parse(field.value) || null)
 
   const geocoder = new MapboxGeocoder({
     accessToken: mapboxgl.accessToken,
@@ -30,14 +30,10 @@ const App = ({ field }) => {
   })
   const draw = new MapboxDraw({
     displayControlsDefault: false,
-    // Select which mapbox-gl-draw control buttons to add to the map.
     controls: {
       polygon: true,
       trash: true,
     },
-    // Set mapbox-gl-draw to draw by default.
-    // The user does not have to click the polygon control button first.
-    // defaultMode: 'draw_polygon',
   })
 
   // Initialize map when component mounts
@@ -58,9 +54,11 @@ const App = ({ field }) => {
 
     function updateArea(e) {
       const data = draw.getAll()
+      console.log(data)
       let bbox = turf.bbox(data)
+      let bounds = turf.bboxPolygon(bbox)
 
-      map.fitBounds(bbox, {
+      map.fitBounds(bounds, {
         padding: {
           top: 50,
           bottom: 50,
@@ -69,7 +67,8 @@ const App = ({ field }) => {
         },
       })
 
-      map.getSource('route').setData(turf.bboxPolygon(bbox))
+      field.value = JSON.stringify(bbox)
+      map.getSource('route').setData(bounds)
     }
 
     // Add navigation control (the +/- zoom buttons)
@@ -79,14 +78,6 @@ const App = ({ field }) => {
       setLng(map.getCenter().lng.toFixed(4))
       setLat(map.getCenter().lat.toFixed(4))
       setZoom(map.getZoom().toFixed(2))
-    })
-
-    // BOUNDS
-    map.addControl(new BoundsControl(), 'top-right')
-    map.on('bounds.get', () => {
-      const b = map.getBounds()
-      field.value = JSON.stringify(b)
-      setBounds(b)
     })
 
     map.on('load', () => {
@@ -103,14 +94,9 @@ const App = ({ field }) => {
         id: 'route',
         type: 'line',
         source: 'route',
-        layout: {
-          //'line-join': 'round',
-          //'line-cap': 'round',
-        },
         paint: {
           'line-color': 'red',
           'line-width': 2,
-          //'line-gap-width': 20,
           'line-offset': -10,
         },
       })
@@ -122,11 +108,11 @@ const App = ({ field }) => {
 
   useEffect(() => {
     if (map && bounds !== null) {
-      let line = turf.lineString([
-        [bounds._sw.lng, bounds._sw.lat],
-        [bounds._ne.lng, bounds._ne.lat],
-      ])
-      let bbox = turf.bbox(line)
+      /*
+      let line = turf.lineString(bounds)
+      let polygon = turf.lineToPolygon(line)
+      console.log(polygon)
+      let bbox = turf.bboxPolygon(polygon)
       map.fitBounds(bbox, {
         padding: {
           top: 20,
@@ -136,6 +122,7 @@ const App = ({ field }) => {
         },
       })
       map.getSource('route').setData(turf.bboxPolygon(bbox))
+      */
     }
   }, [bounds, map]) // eslint-disable-line react-hooks/exhaustive-deps
 
