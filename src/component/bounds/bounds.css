@@ -1,0 +1,22 @@
+.mapboxgl-ctrl-group {
+  overflow: hidden;
+  /* geolocate control is broken for display: flex */
+  /* remove broken button focus shadow */
+}
+.mapboxgl-ctrl-group:not(:empty) {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+.mapboxgl-ctrl-group button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mapboxgl-ctrl-group button svg {
+  vertical-align: top;
+}
+.mapboxgl-ctrl-group .mapboxgl-ctrl-geolocate {
+  display: block;
+}
+.mapboxgl-ctrl-group button:focus {
+  box-shadow: none;
+}
