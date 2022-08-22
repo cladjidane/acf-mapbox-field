@@ -39,7 +39,7 @@ if (!class_exists('K_acf_field_bounds_map')) :
 		*  label (string) Multiple words, can include spaces, visible when selecting a field type
 		*/
 
-			$this->label = __('FIELD_LABEL', 'TEXTDOMAIN');
+			$this->label = __('FIELD_LABEL', 'KACF');
 
 
 			/*
@@ -64,7 +64,7 @@ if (!class_exists('K_acf_field_bounds_map')) :
 		*/
 
 			$this->l10n = array(
-				'error'	=> __('Error! Please enter a higher value', 'TEXTDOMAIN'),
+				'error'	=> __('Error! Please enter a higher value', 'KACF'),
 			);
 
 
@@ -107,8 +107,8 @@ if (!class_exists('K_acf_field_bounds_map')) :
 		*/
 
 			acf_render_field_setting($field, array(
-				'label'			=> __('Font Size', 'TEXTDOMAIN'),
-				'instructions'	=> __('Customise the input font size', 'TEXTDOMAIN'),
+				'label'			=> __('Font Size', 'KACF'),
+				'instructions'	=> __('Customise the input font size', 'KACF'),
 				'type'			=> 'number',
 				'name'			=> 'font_size',
 				'prepend'		=> 'px',
@@ -180,13 +180,13 @@ if (!class_exists('K_acf_field_bounds_map')) :
 
 
 			// register & include JS
-			wp_register_script('TEXTDOMAIN', "{$url}assets/index.js", array('acf-input'), $version);
-			wp_enqueue_script('TEXTDOMAIN');
+			wp_register_script('KACF', "{$url}assets/index.js", array('acf-input'), $version);
+			wp_enqueue_script('KACF');
 
 
 			// register & include CSS
-			wp_register_style('TEXTDOMAIN', "{$url}assets/index.css", array('acf-input'), $version);
-			wp_enqueue_style('TEXTDOMAIN');
+			wp_register_style('KACF', "{$url}assets/index.css", array('acf-input'), $version);
+			wp_enqueue_style('KACF');
 		}
 
 
@@ -442,7 +442,7 @@ if (!class_exists('K_acf_field_bounds_map')) :
 		// Advanced usage
 		if( $value < $field['custom_minimum_setting'] )
 		{
-			$valid = __('The value is too little!','TEXTDOMAIN'),
+			$valid = __('The value is too little!','KACF'),
 		}
 
 
