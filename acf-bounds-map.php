@@ -1,12 +1,12 @@
 <?php
 
 /*
-Plugin Name: Advanced Custom Fields: FIELD_LABEL
-Plugin URI: PLUGIN_URL
-Description: SHORT_DESCRIPTION
+Plugin Name: Advanced Custom Fields by K: Bounds map
+Plugin URI: X
+Description: The plugin add a map for get bound area
 Version: 1.0.0
-Author: AUTHOR_NAME
-Author URI: AUTHOR_URL
+Author: FABIEN CANU
+Author URI: koality.fr
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */

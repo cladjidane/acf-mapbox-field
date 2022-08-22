@@ -39,7 +39,7 @@ if (!class_exists('K_acf_field_bounds_map')) :
 		*  label (string) Multiple words, can include spaces, visible when selecting a field type
 		*/
 
-			$this->label = __('FIELD_LABEL', 'KACF');
+			$this->label = __('BOUNDS', 'KACF');
 
 
 			/*
