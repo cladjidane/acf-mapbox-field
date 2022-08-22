@@ -58,14 +58,14 @@ const App = () => {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (mapContainerRef.current && bounds) {
+    if (mapContainerRef.current && bounds !== null) {
       const bbox = bounds
       map.fitBounds(bbox, {
         padding: {
-          top: 200,
-          bottom: 200,
-          left: 200,
-          right: 200,
+          top: 20,
+          bottom: 20,
+          left: 20,
+          right: 20,
         },
       })
     }
