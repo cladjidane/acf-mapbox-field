@@ -10,6 +10,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import BoundsControl from './component/bounds/bounds'
 import MapboxDraw from '@mapbox/mapbox-gl-draw'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
+import { getBoundsByPoints } from './utils/helpers'
 import mapboxgl from 'mapbox-gl'
 
 mapboxgl.accessToken =
@@ -55,20 +56,18 @@ const App = ({ field }) => {
 
     function updateArea(e) {
       const data = draw.getAll()
-      const coordinates = data.features[0].geometry.coordinates
-
-      const bounding = new mapboxgl.LngLatBounds(
-        coordinates[0][0],
-        coordinates[0][0]
-      )
-
-      for (const coord of coordinates[0]) {
-        bounding.extend(coord)
+      if (
+        data.features.length === 0 ||
+        data.features[0].geometry.coordinates.length === 0
+      ) {
+        map.getSource('route').setData({
+          type: 'FeatureCollection',
+          features: [],
+        })
+        return
       }
 
-      //const marker1 = new mapboxgl.Marker().setLngLat(bounding._ne).addTo(map)
-      //const marker2 = new mapboxgl.Marker().setLngLat(bounding._sw).addTo(map)
-
+      const coordinates = data.features[0].geometry.coordinates
       field.value = JSON.stringify(coordinates)
       map.getSource('route').setData(turf.bboxPolygon(turf.bbox(data)))
 
@@ -76,7 +75,7 @@ const App = ({ field }) => {
       // Sans ça la première fois le fit ne marche pas mais en déplaçant un point ça marche bien
       // Ce petit timeout regle le soucis ??
       setTimeout(() => {
-        map.fitBounds(bounding, {
+        map.fitBounds(getBoundsByPoints(coordinates), {
           padding: 50,
         })
       }, 200)
@@ -112,10 +111,14 @@ const App = ({ field }) => {
         },
       })
 
-      let modes = MapboxDraw.modes
-      modes.custom_select = MapboxDraw.modes.direct_select
-
-      draw.add(turf.polygon(bounds))
+      if (bounds !== null) {
+        let feature = turf.polygon(bounds)
+        feature.id = '03542671a33354aa988e8f87999041c1'
+        draw.add(feature)
+        draw.changeMode('direct_select', {
+          featureId: '03542671a33354aa988e8f87999041c1',
+        })
+      }
     })
 
     // Clean up on unmount
@@ -124,17 +127,13 @@ const App = ({ field }) => {
 
   useEffect(() => {
     if (map && bounds !== null) {
-      let polygon = turf.polygon(bounds)
-      let features = turf.explode(polygon).features
-      let bounding = new mapboxgl.LngLatBounds(bounds[0][0], bounds[0][0])
-
-      for (const coord of bounds[0]) {
-        bounding.extend(coord)
-      }
       setTimeout(() => {
-        map.fitBounds(bounding, {
+        map.fitBounds(getBoundsByPoints(bounds), {
           padding: 50,
         })
+        map
+          .getSource('route')
+          .setData(turf.bboxPolygon(turf.bbox(turf.lineString(bounds[0]))))
       }, 200)
     }
   }, [bounds, map]) // eslint-disable-line react-hooks/exhaustive-deps
