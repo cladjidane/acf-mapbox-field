@@ -30,6 +30,7 @@ const App = ({ field }) => {
   })
   const draw = new MapboxDraw({
     displayControlsDefault: false,
+    //defaultMode: 'draw_polygon',
     controls: {
       polygon: true,
       trash: true,
@@ -110,6 +111,11 @@ const App = ({ field }) => {
           'line-offset': -10,
         },
       })
+
+      let modes = MapboxDraw.modes
+      modes.custom_select = MapboxDraw.modes.direct_select
+
+      draw.add(turf.polygon(bounds))
     })
 
     // Clean up on unmount
@@ -125,13 +131,6 @@ const App = ({ field }) => {
       for (const coord of bounds[0]) {
         bounding.extend(coord)
       }
-
-      map.on('load', function () {
-        for (const feature of turf.explode(polygon).features) {
-          var featureIds = draw.add(feature)
-          console.log('featureIds', featureIds)
-        }
-      })
       setTimeout(() => {
         map.fitBounds(bounding, {
           padding: 50,
