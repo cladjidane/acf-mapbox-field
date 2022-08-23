@@ -64,6 +64,7 @@ const App = ({ field }) => {
           type: 'FeatureCollection',
           features: [],
         })
+        field.value = JSON.stringify(null)
         return
       }
 
