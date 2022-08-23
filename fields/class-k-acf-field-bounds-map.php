@@ -54,7 +54,7 @@ if (!class_exists('K_acf_field_bounds_map')) :
 		*/
 
 			$this->defaults = array(
-				'font_size'	=> 14,
+				'value'	=> "null",
 			);
 
 

@@ -55,6 +55,7 @@ const App = ({ field }) => {
     map.on('draw.update', updateArea)
 
     function updateArea(e) {
+      console.log('del')
       const data = draw.getAll()
       if (
         data.features.length === 0 ||
